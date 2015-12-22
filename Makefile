@@ -1,14 +1,14 @@
-CONSUL_VERSION=0.5.2
+CONSUL_VERSION=0.6.0
 REPLICATE_VERSION=0.2.0
-TEMPLATE_VERSION=0.9.0
-ENVCONSUL_VERSION=0.5.0
+TEMPLATE_VERSION=0.12.0
+ENVCONSUL_VERSION=0.6.0
 
 CONSUL_ITERATION=1
-ENVCONSUL_ITERATION=2
+ENVCONSUL_ITERATION=1
 REPLICATE_ITERATION=1
 TEMPLATE_ITERATION=1
 
-PACKAGER="Gavin M. Roy <gavinr@aweber.com>"
+PACKAGER="Ayush Goyal<ayush@helpshift.com>"
 ARCH=amd64
 
 all: consul consul-replicate consul-template consul-webui envconsul
@@ -116,30 +116,37 @@ dist/envconsul_${ENVCONSUL_VERSION}-${ENVCONSUL_ITERATION}_${ARCH}.deb: build/en
 build/consul/usr/sbin/consul:
 	@( echo "Downloading consul ${CONSUL_VERSION}" )
 	@( mkdir -p build/consul/usr/sbin/ )
-	@( curl -s -o /tmp/${CONSUL_VERSION}_linux_${ARCH}.zip -L https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_linux_${ARCH}.zip )
-	@( unzip -q -d build/consul/usr/sbin/ /tmp/${CONSUL_VERSION}_linux_${ARCH}.zip )
-	@( rm /tmp/${CONSUL_VERSION}_linux_${ARCH}.zip )
+	@( curl -s -o /tmp/consul-${CONSUL_VERSION}_linux_${ARCH}.zip -L https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_${ARCH}.zip )
+	@( unzip -q -d build/consul/usr/sbin/ /tmp/consul-${CONSUL_VERSION}_linux_${ARCH}.zip )
+	@( rm /tmp/consul-${CONSUL_VERSION}_linux_${ARCH}.zip )
 
 build/consul-replicate/usr/sbin/consul-replicate:
 	@( echo "Downloading consul-replicate ${REPLICATE_VERSION}" )
-	@( mkdir -p build/consul-replicate/usr/sbin )
-	@( curl -o build/consul-replicate/usr/sbin/consul-replicate -s -L https://github.com/hashicorp/consul-replicate/releases/download/v${REPLICATE_VERSION}/consul-replicate_linux_${ARCH} )
-	@( chmod a+x build/consul-replicate/usr/sbin/consul-replicate )
+	@( mkdir -p build/consul-replicate/usr/sbin/ )
+	@( curl -s -o /tmp/consul-replicate-${REPLICATE_VERSION}_linux_${ARCH}.zip -L https://releases.hashicorp.com/consul-replicate/${REPLICATE_VERSION}/consul-replicate_${REPLICATE_VERSION}_linux_${ARCH}.zip )
+	@( unzip -q -d build/consul-replicate/usr/sbin/ /tmp/consul-replicate-${REPLICATE_VERSION}_linux_${ARCH}.zip )
+	@( rm /tmp/consul-replicate-${REPLICATE_VERSION}_linux_${ARCH}.zip )
+
 
 build/consul-template/usr/sbin/consul-template:
 	@( echo "Downloading consul-template ${TEMPLATE_VERSION}" )
-	@( mkdir -p build/consul-template/usr/sbin )
-	@( curl -s -L https://github.com/hashicorp/consul-template/releases/download/v${TEMPLATE_VERSION}/consul-template_${TEMPLATE_VERSION}_linux_${ARCH}.tar.gz | tar xvz -C build/consul-template/usr/sbin --strip-components=1 )
+	@( mkdir -p build/consul-template/usr/sbin/ )
+	@( curl -s -o /tmp/consul-template-${TEMPLATE_VERSION}_linux_${ARCH}.zip -L https://releases.hashicorp.com/consul-template/${TEMPLATE_VERSION}/consul-template_${TEMPLATE_VERSION}_linux_${ARCH}.zip )
+	@( unzip -q -d build/consul-template/usr/sbin/ /tmp/consul-template-${TEMPLATE_VERSION}_linux_${ARCH}.zip )
+	@( rm /tmp/consul-template-${TEMPLATE_VERSION}_linux_${ARCH}.zip )
 
-build/consul-webui/usr/share/consul-webui:
-	@( echo "Downloading consul-webui ${CONSUL_VERSION}" )
-	@( mkdir -p build/consul-webui/usr/share )
-	@( curl -s -o /tmp/${CONSUL_VERSION}_web_ui.zip -L https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_web_ui.zip )
-	@( unzip -q -d build/consul-webui/usr/share/ /tmp/${CONSUL_VERSION}_web_ui.zip )
-	@( mv build/consul-webui/usr/share/dist build/consul-webui/usr/share/consul-webui )
-	@( rm /tmp/${CONSUL_VERSION}_web_ui.zip )
 
 build/envconsul/usr/sbin/envconsul:
 	@( echo "Downloading envconsul ${ENVCONSUL_VERSION}" )
-	@( mkdir -p build/envconsul/usr/sbin )
-	@( curl -s -L https://github.com/hashicorp/envconsul/releases/download/v${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_${ARCH}.tar.gz | tar xvz -C build/envconsul/usr/sbin --strip-components=1 )
+	@( mkdir -p build/envconsul/usr/sbin/ )
+	@( curl -s -o /tmp/envconsul-${ENVCONSUL_VERSION}_linux_${ARCH}.zip -L https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_${ARCH}.zip )
+	@( unzip -q -d build/envconsul/usr/sbin/ /tmp/envconsul-${ENVCONSUL_VERSION}_linux_${ARCH}.zip )
+	@( rm /tmp/envconsul-${ENVCONSUL_VERSION}_linux_${ARCH}.zip )
+
+
+build/consul-webui/usr/share/consul-webui:
+	@( echo "Downloading consul-webui ${CONSUL_VERSION}" )
+	@( mkdir -p build/consul-webui/usr/share/consul-webui )
+	@( curl -s -o /tmp/consul-webui-${CONSUL_VERSION}_linux_${ARCH}.zip -L https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_web_ui.zip )
+	@( unzip -q -d build/consul-webui/usr/share/consul-webui /tmp/consul-webui-${CONSUL_VERSION}_linux_${ARCH}.zip )
+	@( rm /tmp/consul-webui-${CONSUL_VERSION}_linux_${ARCH}.zip )
